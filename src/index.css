@@ -1,0 +1,11 @@
+.bg_waves {
+  background-image: url("./Assets/Wave.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.bg_light {
+  background-image: url("./Assets/Rect\ Light.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
