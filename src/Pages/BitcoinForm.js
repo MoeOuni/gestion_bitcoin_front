@@ -2,7 +2,8 @@ import { Button, Form, Input } from "antd";
 import React from "react";
 import Title from "../Components/Title";
 import bitcoinSvg from "../Assets/Bitcoin-rafiki.svg";
-
+import { createCurrencys } from "../API/actions";
+import { useNavigate } from "react-router-dom";
 const layout = {
   labelCol: {
     span: 8,
@@ -13,6 +14,13 @@ const layout = {
 };
 
 const BitcoinForm = () => {
+  const [form] = Form.useForm();
+  const Navigate = useNavigate();
+
+  const handleForm = async (formValues) => {
+    const { data } = await createCurrencys(formValues);
+    Navigate("/admin/currency/list");
+  };
   return (
     <>
       <div className="row">
@@ -20,7 +28,7 @@ const BitcoinForm = () => {
         <div className="col-lg-6 col-md-8 col-sm-12">
           <div className="d-flex align-items-center h-100">
             <div className="w-100">
-              <Form layout="vertical">
+              <Form form={form} onFinish={handleForm} layout="vertical">
                 <Form.Item
                   label="Currency Name"
                   name="bitcoinName"
@@ -49,7 +57,7 @@ const BitcoinForm = () => {
                   <Button type="primary" htmlType="submit">
                     Ajouter
                   </Button>
-                  <Button type="danger" className="mx-2">
+                  <Button type="danger" htmlType="reset" className="mx-2">
                     Annuler
                   </Button>
                 </Form.Item>
