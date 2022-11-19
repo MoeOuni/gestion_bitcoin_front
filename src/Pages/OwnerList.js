@@ -1,10 +1,26 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Button, Input, Space, Table } from "antd";
-import React, { useRef, useState } from "react";
+import { Button, Input, Space, Table, Typography } from "antd";
+import React, { useEffect, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
+import { fetchClients } from "../API/actions";
+import get from "lodash.get";
+import isequal from "lodash.isequal";
 import Title from "../Components/Title";
 
+const { Text } = Typography;
+
 const OwnerList = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    async function fetchAll() {
+      const { data } = await fetchClients();
+      setData(data);
+      return data;
+    }
+    fetchAll();
+  }, []);
+
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -17,7 +33,7 @@ const OwnerList = () => {
     clearFilters();
     setSearchText("");
   };
-  const getColumnSearchProps = (dataIndex) => ({
+  const getColumnSearchProps = (dataIndex, title) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -33,7 +49,7 @@ const OwnerList = () => {
       >
         <Input
           ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
+          placeholder={`Search ${title}`}
           value={selectedKeys[0]}
           onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -76,14 +92,17 @@ const OwnerList = () => {
       />
     ),
     onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+      get(record, dataIndex)
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
         setTimeout(() => searchInput.current?.select(), 100);
       }
     },
     render: (text) =>
-      searchedColumn === dataIndex ? (
+      isequal(searchedColumn, dataIndex) ? (
         <Highlighter
           highlightStyle={{
             backgroundColor: "#ffc069",
@@ -101,25 +120,33 @@ const OwnerList = () => {
   const columns = [
     {
       title: "Id #",
+      dataIndex: "idOwner",
     },
     {
       title: "Client's Name",
-      ...getColumnSearchProps("Client's Name"),
+      dataIndex: "nomOwner",
+      ...getColumnSearchProps("nomOwner", "By Name"),
     },
     {
       title: "Currency",
-      ...getColumnSearchProps("Currency"),
+      dataIndex: ["bitcoin", "bitcoinName"],
+      ...getColumnSearchProps(["bitcoin", "bitcoinName"], "By Currency"),
     },
     {
       title: "Amount",
-      dataIndex: "amount",
-      sorter: (a, b) => a.amount - b.amount,
+      dataIndex: "coinsOwned",
+      ...getColumnSearchProps("coinsOwned", "Amount"),
+      sorter: (a, b) => a.coinsOwned - b.coinsOwned,
+    },
+    {
+      title: "Purchase Date",
+      dataIndex: "purchaseDate",
+      ...getColumnSearchProps("purchaseDate", "Date"),
+      sorter: (a, b) => new Date(a.purchaseDate) - new Date(b.purchaseDate),
     },
     {
       title: "Price",
-      dataIndex: "price",
-      ...getColumnSearchProps("Price"),
-      sorter: (a, b) => a.price - b.price,
+      dataIndex: ["bitcoin", "bitcoinPrice"],
     },
     {
       title: "Actions",
@@ -130,7 +157,11 @@ const OwnerList = () => {
     <>
       <Title text={"Clients List"} />
       <div className="mt-5">
-        <Table columns={columns} />
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={{ pageSize: 5 }}
+        />
       </div>
     </>
   );

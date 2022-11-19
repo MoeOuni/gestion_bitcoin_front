@@ -295,9 +295,7 @@ const BitcoinList = () => {
             dataSource={data}
             columns={mergedColumns}
             rowClassName="editable-row"
-            pagination={{
-              onChange: cancel,
-            }}
+            pagination={{ pageSize: 5 }}
           />
         </Form>
       </div>
