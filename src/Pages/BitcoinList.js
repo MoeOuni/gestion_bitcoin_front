@@ -291,7 +291,6 @@ const BitcoinList = () => {
                 cell: EditableCell,
               },
             }}
-            bordered
             dataSource={data}
             columns={mergedColumns}
             rowClassName="editable-row"

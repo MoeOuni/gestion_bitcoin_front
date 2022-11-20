@@ -57,7 +57,12 @@ const BitcoinForm = () => {
                   <Button type="primary" htmlType="submit">
                     Ajouter
                   </Button>
-                  <Button type="danger" htmlType="reset" className="mx-2">
+                  <Button
+                    type="primary"
+                    danger
+                    htmlType="reset"
+                    className="mx-2"
+                  >
                     Annuler
                   </Button>
                 </Form.Item>

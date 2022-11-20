@@ -1,11 +1,12 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Button, Input, Space, Table, Typography } from "antd";
+import { Button, Input, Popconfirm, Space, Table, Typography } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { fetchClients } from "../API/actions";
 import get from "lodash.get";
 import isequal from "lodash.isequal";
 import Title from "../Components/Title";
+import EditModal from "../Components/EditModal";
 
 const { Text } = Typography;
 
@@ -117,6 +118,15 @@ const OwnerList = () => {
       ),
   });
 
+  const handleDelete = async (key) => {
+    try {
+      // await deleteCurrency(key);
+      setData((data) => data.filter((item) => item.idOwner !== key));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const columns = [
     {
       title: "Id #",
@@ -150,6 +160,18 @@ const OwnerList = () => {
     },
     {
       title: "Actions",
+      render: (_, record) => (
+        <>
+          <EditModal />
+          <Popconfirm
+            className="mx-2"
+            title="Sure to delete?"
+            onConfirm={() => handleDelete(record.idOwner)}
+          >
+            <a className="text-danger">Delete</a>
+          </Popconfirm>
+        </>
+      ),
     },
   ];
 
