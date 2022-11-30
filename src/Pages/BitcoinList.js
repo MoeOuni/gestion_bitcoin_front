@@ -13,6 +13,8 @@ import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import Title from "../Components/Title";
 import { deleteCurrency, fetchCurrencys, updateCurrency } from "../API/actions";
+import jwt from "jwt-decode";
+import localStorageService from "../Utils/localStorageService";
 
 const EditableCell = ({
   editing,
@@ -50,6 +52,7 @@ const EditableCell = ({
 };
 
 const BitcoinList = () => {
+  const user = jwt(localStorageService().getToken());
   useEffect(() => {
     async function fetchAll() {
       const { data } = await fetchCurrencys();
@@ -246,19 +249,28 @@ const BitcoinList = () => {
           </span>
         ) : (
           <>
-            <Typography.Link
-              disabled={editingKey !== ""}
-              onClick={() => edit(record)}
-            >
-              Edit
-            </Typography.Link>
-            <Popconfirm
-              className="mx-2"
-              title="Sure to delete?"
-              onConfirm={() => handleDelete(record.idBitcoin)}
-            >
-              <a className="text-danger">Delete</a>
-            </Popconfirm>
+            {user.roles.includes("ADMIN") ? (
+              <>
+                <Typography.Link
+                  disabled={editingKey !== ""}
+                  onClick={() => edit(record)}
+                >
+                  Edit
+                </Typography.Link>
+                <Popconfirm
+                  className="mx-2"
+                  title="Sure to delete?"
+                  onConfirm={() => handleDelete(record.idBitcoin)}
+                >
+                  <a className="text-danger">Delete</a>
+                </Popconfirm>
+              </>
+            ) : (
+              <Space>
+                <Typography.Text disabled>Edit</Typography.Text>
+                <Typography.Text disabled>Delete</Typography.Text>
+              </Space>
+            )}
           </>
         );
       },

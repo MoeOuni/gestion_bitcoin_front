@@ -8,10 +8,13 @@ import isequal from "lodash.isequal";
 import Title from "../Components/Title";
 import EditModal from "../Components/EditModal";
 import moment from "moment";
+import jwt from "jwt-decode";
+import localStorageService from "../Utils/localStorageService";
 
 const { Text } = Typography;
 
 const OwnerList = () => {
+  const user = jwt(localStorageService().getToken());
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -168,14 +171,23 @@ const OwnerList = () => {
       title: "Actions",
       render: (_, record) => (
         <>
-          <EditModal data={record} dataList={data} setDataList={setData} />
-          <Popconfirm
-            className="mx-2"
-            title="Sure to delete?"
-            onConfirm={() => handleDelete(record.idOwner)}
-          >
-            <a className="text-danger">Delete</a>
-          </Popconfirm>
+          {user.roles.includes("ADMIN") ? (
+            <>
+              <EditModal data={record} dataList={data} setDataList={setData} />
+              <Popconfirm
+                className="mx-2"
+                title="Sure to delete?"
+                onConfirm={() => handleDelete(record.idOwner)}
+              >
+                <a className="text-danger">Delete</a>
+              </Popconfirm>
+            </>
+          ) : (
+            <Space>
+              <Typography.Text disabled>Edit</Typography.Text>
+              <Typography.Text disabled>Delete</Typography.Text>
+            </Space>
+          )}
         </>
       ),
     },

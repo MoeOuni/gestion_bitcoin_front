@@ -25,7 +25,7 @@ const Login = () => {
   return (
     <div className="bg_light">
       <div className="d-flex align-items-center justify-content-center  min-vh-100">
-        <div className="col-lg-6 col-md-8 col-sm-12 bg-light bg-opacity-50 p-5 rounded-5 shadow-lg">
+        <div className="col-lg-5 col-md-6 col-sm-12 bg-light bg-opacity-50 p-5 rounded-5 shadow-lg">
           <div>
             <h4 className="mb-4 text-center">
               <span className="border-bottom border-dark">

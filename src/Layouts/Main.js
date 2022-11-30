@@ -55,17 +55,18 @@ const Main = () => {
       "sub1",
       <img src={bitcoin} style={{ height: "14px" }} />,
       [
-        getItem(
-          <Link
-            className="fw-bold"
-            style={{ textDecoration: "none" }}
-            to={"/admin/currency/form"}
-          >
-            Add
-          </Link>,
-          "1",
-          <FontAwesomeIcon icon={faCirclePlus} />
-        ),
+        user.roles.includes("ADMIN") &&
+          getItem(
+            <Link
+              className="fw-bold"
+              style={{ textDecoration: "none" }}
+              to={"/admin/currency/form"}
+            >
+              Add
+            </Link>,
+            "1",
+            <FontAwesomeIcon icon={faCirclePlus} />
+          ),
         getItem(
           <Link
             className="fw-bold"
@@ -84,18 +85,19 @@ const Main = () => {
       "sub2",
       <FontAwesomeIcon icon={faUserCircle} />,
       [
-        getItem(
-          <Link
-            className="fw-bold"
-            style={{ textDecoration: "none" }}
-            to={"/admin/client/form"}
-          >
-            Add
-          </Link>,
+        user.roles.includes("ADMIN") &&
+          getItem(
+            <Link
+              className="fw-bold"
+              style={{ textDecoration: "none" }}
+              to={"/admin/client/form"}
+            >
+              Add
+            </Link>,
 
-          "5",
-          <FontAwesomeIcon icon={faCirclePlus} />
-        ),
+            "5",
+            <FontAwesomeIcon icon={faCirclePlus} />
+          ),
         getItem(
           <Link
             className="fw-bold"
