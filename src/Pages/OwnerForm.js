@@ -41,7 +41,7 @@ const OwnerForm = () => {
                   <Input placeholder="Foulen Ben Foulen" />
                 </Form.Item>
                 <Form.Item label="Purchase date" name="purchaseDate">
-                  <DatePicker className="w-100" format={"yyyy-MM-DD"} />
+                  <DatePicker className="w-100" format={"YYYY-MM-DD"} />
                 </Form.Item>
 
                 <Form.Item label="Currency">

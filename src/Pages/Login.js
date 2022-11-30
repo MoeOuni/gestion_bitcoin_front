@@ -1,14 +1,26 @@
 import { Button, Form, Input } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import localStorageService from "../Utils/localStorageService";
 
 const Login = () => {
   const [form] = Form.useForm();
 
   const Navigate = useNavigate();
 
-  const handleLogin = (formValues) => {
-    Navigate("/admin/client/list");
+  const handleLogin = async (formValues) => {
+    try {
+      const { headers } = await axios.post(
+        `${process.env.REACT_APP_API_URL_LOGIN}/login`,
+        formValues
+      );
+      localStorageService().setToken(headers.authorization);
+
+      Navigate("/admin/client/list");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="bg_light">

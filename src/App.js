@@ -7,6 +7,7 @@ import Login from "./Pages/Login";
 import OwnerForm from "./Pages/OwnerForm";
 import OwnerList from "./Pages/OwnerList";
 import SignUp from "./Pages/SignUp";
+import UsersList from "./Pages/UsersList";
 const App = () => {
   return (
     <Routes>
@@ -14,11 +15,11 @@ const App = () => {
       <Route path="/signup" exact element={<SignUp />} />
 
       <Route path="/admin" exact element={<Main />}>
-        <Route path="/admin/currency/list" element={<BitcoinList />} />
-        <Route path="/admin/currency/form" element={<BitcoinForm />} />
-
-        <Route path="/admin/client/form" element={<OwnerForm />} />
-        <Route path="/admin/client/list" element={<OwnerList />} />
+        <Route path="currency/list" element={<BitcoinList />} />
+        <Route path="currency/form" element={<BitcoinForm />} />
+        <Route path="users/list" element={<UsersList />} />
+        <Route path="client/form" element={<OwnerForm />} />
+        <Route path="client/list" element={<OwnerList />} />
       </Route>
     </Routes>
   );

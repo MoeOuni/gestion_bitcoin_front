@@ -2,11 +2,12 @@ import { SearchOutlined } from "@ant-design/icons";
 import { Button, Input, Popconfirm, Space, Table, Typography } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
-import { fetchClients } from "../API/actions";
+import { deleteClient, fetchClients } from "../API/actions";
 import get from "lodash.get";
 import isequal from "lodash.isequal";
 import Title from "../Components/Title";
 import EditModal from "../Components/EditModal";
+import moment from "moment";
 
 const { Text } = Typography;
 
@@ -17,6 +18,7 @@ const OwnerList = () => {
     async function fetchAll() {
       const { data } = await fetchClients();
       setData(data);
+      console.log(data);
       return data;
     }
     fetchAll();
@@ -120,7 +122,7 @@ const OwnerList = () => {
 
   const handleDelete = async (key) => {
     try {
-      // await deleteCurrency(key);
+      await deleteClient(key);
       setData((data) => data.filter((item) => item.idOwner !== key));
     } catch (err) {
       console.log(err);
@@ -151,18 +153,22 @@ const OwnerList = () => {
     {
       title: "Purchase Date",
       dataIndex: "purchaseDate",
+      render: (_, text) => (
+        <Typography.Text>{moment(text).format("YYYY-MM-DD")}</Typography.Text>
+      ),
       ...getColumnSearchProps("purchaseDate", "Date"),
       sorter: (a, b) => new Date(a.purchaseDate) - new Date(b.purchaseDate),
     },
     {
       title: "Price",
       dataIndex: ["bitcoin", "bitcoinPrice"],
+      sorter: (a, b) => a.bitcoin.bitcoinPrice - b.bitcoin.bitcoinPrice,
     },
     {
       title: "Actions",
       render: (_, record) => (
         <>
-          <EditModal />
+          <EditModal data={record} dataList={data} setDataList={setData} />
           <Popconfirm
             className="mx-2"
             title="Sure to delete?"
